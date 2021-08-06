@@ -10,6 +10,7 @@ import logging
 import pathlib
 import requests
 import subprocess
+import psutil
 
 from typing import Union
 from typing import List
@@ -448,6 +449,12 @@ class IBClient():
                 cwd=self.client_portal_folder,
                 stdout=subprocess.DEVNULL
             ).pid
+
+            time.sleep(2)
+
+            for proc in psutil.process_iter():
+                if 'java' in proc.name():
+                    self.server_process = proc.pid
 
         return self.server_process
 
